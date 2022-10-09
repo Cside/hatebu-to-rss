@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const app = express();
 app.use(morgan('combined'));
 app.get('/:userID', async (req, res) => {
+    var _a, _b, _c, _d, _e, _f;
     const userID = req.params.userID;
     const httpRes = await fetch(`https://b.hatena.ne.jp/${userID}`);
     if (httpRes.status === 404) {
@@ -27,11 +28,12 @@ app.get('/:userID', async (req, res) => {
         copyright: 'All rights reserved 2022, Mochi',
     });
     for (const article of document.querySelectorAll('.bookmark-item')) {
-        const title = article.querySelector('.centerarticle-entry-title a')?.textContent ?? '';
-        const url = article.querySelector('.centerarticle-entry-title a')?.getAttribute('href') ?? '';
-        const comment = article.querySelector('.js-comment')?.textContent ?? '';
+        const title = (_b = (_a = article.querySelector('.centerarticle-entry-title a')) === null || _a === void 0 ? void 0 : _a.textContent) !== null && _b !== void 0 ? _b : '';
+        const url = (_d = (_c = article.querySelector('.centerarticle-entry-title a')) === null || _c === void 0 ? void 0 : _c.getAttribute('href')) !== null && _d !== void 0 ? _d : '';
+        const comment = (_f = (_e = article.querySelector('.js-comment')) === null || _e === void 0 ? void 0 : _e.textContent) !== null && _f !== void 0 ? _f : '';
         const date = (() => {
-            const yyyymmdd = article.querySelector('.centerarticle-reaction-timestamp')?.textContent ?? '';
+            var _a, _b;
+            const yyyymmdd = (_b = (_a = article.querySelector('.centerarticle-reaction-timestamp')) === null || _a === void 0 ? void 0 : _a.textContent) !== null && _b !== void 0 ? _b : '';
             const [yy, mm, dd] = yyyymmdd.split('/').map(str => Number(str));
             return new Date(yy, mm - 1, dd);
         })();
@@ -47,4 +49,4 @@ app.get('/:userID', async (req, res) => {
     res.type('application/xml');
     res.send(feed.atom1());
 });
-app.listen(3000);
+app.listen(process.env.PORT);
