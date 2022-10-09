@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon"
+    "start": "node dist/app.js",
+    "dev": "PORT=3000 nodemon dist/app.js"
   },
   "dependencies": {
     "@tsconfig/recommended": "^1.0.1",
