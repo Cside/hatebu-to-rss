@@ -11,6 +11,10 @@ app.use(morgan('combined'));
 
 app.get('/:userID', async (req: express.Request, res: express.Response) => {
     const userID = req.params.userID;
+    if (!userID || userID === 'favicon.ico') {
+        res.status(200);
+        return res.send('OK');
+    }
 
     const httpRes = await axios.get<string>(`https://b.hatena.ne.jp/${userID}`);
     if (httpRes.status === 404) {
