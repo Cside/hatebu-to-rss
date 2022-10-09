@@ -1,4 +1,5 @@
 import express = require('express');
+import axios from 'axios';
 import { Feed } from 'feed';
 import { JSDOM } from 'jsdom';
 
@@ -11,7 +12,7 @@ app.use(morgan('combined'));
 app.get('/:userID', async (req: express.Request, res: express.Response) => {
     const userID = req.params.userID;
 
-    const httpRes = await fetch(`https://b.hatena.ne.jp/${userID}`);
+    const httpRes = await axios.get<string>(`https://b.hatena.ne.jp/${userID}`);
     if (httpRes.status === 404) {
         res.status(400);
         return res.send(`User "${userID}" is not found`);
@@ -19,7 +20,7 @@ app.get('/:userID', async (req: express.Request, res: express.Response) => {
         res.status(503);
         return res.send(`Some error occured. code: ${httpRes.status}`);
     }
-    const html = await httpRes.text();
+    const html = await httpRes.data;
 
     const dom = new JSDOM(html);
     const document = dom.window.document

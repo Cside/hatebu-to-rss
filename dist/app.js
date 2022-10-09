@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
+const axios_1 = __importDefault(require("axios"));
 const feed_1 = require("feed");
 const jsdom_1 = require("jsdom");
 const morgan = require('morgan');
@@ -9,7 +13,7 @@ app.use(morgan('combined'));
 app.get('/:userID', async (req, res) => {
     var _a, _b, _c, _d, _e, _f;
     const userID = req.params.userID;
-    const httpRes = await fetch(`https://b.hatena.ne.jp/${userID}`);
+    const httpRes = await axios_1.default.get(`https://b.hatena.ne.jp/${userID}`);
     if (httpRes.status === 404) {
         res.status(400);
         return res.send(`User "${userID}" is not found`);
@@ -18,7 +22,7 @@ app.get('/:userID', async (req, res) => {
         res.status(503);
         return res.send(`Some error occured. code: ${httpRes.status}`);
     }
-    const html = await httpRes.text();
+    const html = await httpRes.data;
     const dom = new jsdom_1.JSDOM(html);
     const document = dom.window.document;
     const feed = new feed_1.Feed({
