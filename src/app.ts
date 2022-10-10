@@ -39,6 +39,7 @@ app.get('/:userID', async (req: express.Request, res: express.Response) => {
     for (const article of document.querySelectorAll('.bookmark-item')) {
         const title = article.querySelector('.centerarticle-entry-title a')?.textContent ?? '';
         const url = article.querySelector('.centerarticle-entry-title a')?.getAttribute('href') ?? '';
+        const commentUrl = article.querySelector('.centerarticle-users a')?.getAttribute('href') ?? '';
         const comment = article.querySelector('.js-comment')?.textContent ?? '';
         const date = (() => {
             const yyyymmdd = article.querySelector('.centerarticle-reaction-timestamp')?.textContent ?? '';
@@ -50,7 +51,7 @@ app.get('/:userID', async (req: express.Request, res: express.Response) => {
             id: url,
             link: url,
             description: comment,
-            content: comment,
+            content: `${comment}\nhttps://b.hatena.ne.jp${commentUrl}`,
             date,
         })
     }

@@ -11,8 +11,12 @@ const morgan = require('morgan');
 const app = express();
 app.use(morgan('combined'));
 app.get('/:userID', async (req, res) => {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     const userID = req.params.userID;
+    if (!userID || userID === 'favicon.ico') {
+        res.status(200);
+        return res.send('OK');
+    }
     const httpRes = await axios_1.default.get(`https://b.hatena.ne.jp/${userID}`);
     if (httpRes.status === 404) {
         res.status(400);
@@ -34,7 +38,8 @@ app.get('/:userID', async (req, res) => {
     for (const article of document.querySelectorAll('.bookmark-item')) {
         const title = (_b = (_a = article.querySelector('.centerarticle-entry-title a')) === null || _a === void 0 ? void 0 : _a.textContent) !== null && _b !== void 0 ? _b : '';
         const url = (_d = (_c = article.querySelector('.centerarticle-entry-title a')) === null || _c === void 0 ? void 0 : _c.getAttribute('href')) !== null && _d !== void 0 ? _d : '';
-        const comment = (_f = (_e = article.querySelector('.js-comment')) === null || _e === void 0 ? void 0 : _e.textContent) !== null && _f !== void 0 ? _f : '';
+        const commentUrl = (_f = (_e = article.querySelector('.centerarticle-users a')) === null || _e === void 0 ? void 0 : _e.getAttribute('href')) !== null && _f !== void 0 ? _f : '';
+        const comment = (_h = (_g = article.querySelector('.js-comment')) === null || _g === void 0 ? void 0 : _g.textContent) !== null && _h !== void 0 ? _h : '';
         const date = (() => {
             var _a, _b;
             const yyyymmdd = (_b = (_a = article.querySelector('.centerarticle-reaction-timestamp')) === null || _a === void 0 ? void 0 : _a.textContent) !== null && _b !== void 0 ? _b : '';
@@ -46,7 +51,7 @@ app.get('/:userID', async (req, res) => {
             id: url,
             link: url,
             description: comment,
-            content: comment,
+            content: `${comment}\nhttps://b.hatena.ne.jp${commentUrl}`,
             date,
         });
     }
