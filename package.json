@@ -18,5 +18,8 @@
   "devDependencies": {
     "@types/jsdom": "^20.0.0",
     "nodemon": "^2.0.19"
+  },
+  "engines": {
+     "node": "16.14.2"
   }
 }
