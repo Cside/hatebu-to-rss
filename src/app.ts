@@ -36,6 +36,9 @@ app.get("/:userID", async (req: express.Request, res: express.Response) => {
   });
 
   for (const article of document.querySelectorAll(".bookmark-item")) {
+    const comment = article.querySelector(".js-comment")?.textContent ?? "";
+    if (comment === "") continue;
+
     const title =
       article.querySelector(".centerarticle-entry-title a")?.textContent ?? "";
     const url =
@@ -46,7 +49,6 @@ app.get("/:userID", async (req: express.Request, res: express.Response) => {
       "https://b.hatena.ne.jp" +
       (article.querySelector(".centerarticle-users a")?.getAttribute("href") ??
         "");
-    const comment = article.querySelector(".js-comment")?.textContent ?? "";
     const date = (() => {
       const yyyymmdd =
         article.querySelector(".centerarticle-reaction-timestamp")
