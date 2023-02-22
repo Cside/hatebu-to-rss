@@ -59,7 +59,7 @@ app.get("/:userID", async (req: express.Request, res: express.Response) => {
     feed.addItem({
       title,
       id: url,
-      link: url,
+      link: commentUrl,
       description: comment,
       content: `${comment}\n<a href="${commentUrl}" target="_blank">${commentUrl}</a>`,
       date,
